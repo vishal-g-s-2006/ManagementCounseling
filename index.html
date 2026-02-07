@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TNEA 2025 - Personal Information</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary-color: #64748b;
+      --secondary-hover: #475569;
+      --success-color: #10b981;
+      --background-bg: #f3f4f6;
+      --surface-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --input-focus-ring: rgba(79, 70, 229, 0.2);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background-bg);
+      background-image: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+      color: var(--text-main);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(to right, #4f46e5, #6366f1);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    header h2 {
+      margin: 0 0 0.5rem 0;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .container {
+      background: var(--surface-bg);
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto 3rem auto;
+      padding: 2.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 95%;
+        padding: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      header {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .step-labels {
+        display: none;
+        /* Hide labels on very small screens if crowded, or keep */
+      }
+
+      .steps {
+        margin-bottom: 1.5rem;
+        /* More space */
+      }
+
+      .payment-amount {
+        font-size: 2.5rem;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h3 {
+      margin-top: 0;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h3 span {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    h4 {
+      color: var(--text-main);
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    /* Steps Container */
+    .steps-container {
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Progress Line using ::before on container wasn't easy with flex-between, 
+   so using a pseudo-element on the container behind the steps */
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      /* Half height of step circle */
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #e2e8f0;
+      z-index: 0;
+      transform: translateY(-50%);
+    }
+
+    .step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      border: 4px solid var(--surface-bg);
+      box-shadow: var(--shadow-sm);
+      cursor: default;
+    }
+
+    .step.active {
+      background: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px var(--input-focus-ring);
+    }
+
+    .step.completed {
+      background: var(--success-color);
+      color: white;
+      border-color: var(--surface-bg);
+    }
+
+    .step-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    .step-labels span {
+      width: 40px;
+      text-align: center;
+      position: relative;
+      /* Align with step circles - strictly assuming equal spacing from flex-between */
+    }
+
+    /* Forms */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+
+    .field.full {
+      flex: 100%;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      background-color: #f9fafb;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--input-focus-ring);
+      background-color: white;
+    }
+
+    /* Radio Group */
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0.75rem 0;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    input[type="radio"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      accent-color: var(--primary-color);
+      margin: 0;
+    }
+
+    /* Tables for School Info */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .school-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    .school-table th,
+    .school-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .school-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .school-table input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-sizing: border-box;
+      /* Fix input overflow */
+    }
+
+    /* Payment Card */
+    .payment-card {
+      background: linear-gradient(135deg, #f8fafc, #eff6ff);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .payment-summary {
+      margin-bottom: 2rem;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 2rem;
+    }
+
+    .fee-label {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .fee-amount {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin: 0;
+      font-weight: 800;
+    }
+
+    .fee-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .payment-methods {
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .method-option {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .method-option:hover,
+    .method-option.selected {
+      border-color: var(--primary-color);
+      background: #eef2ff;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: flex-end;
+    }
+
+    button {
+      background: var(--primary-color);
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-md);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.secondary {
+      background: var(--surface-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    button.secondary:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+      border-color: var(--secondary-color);
+    }
+
+    button[disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Utility */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Login Page Styles */
+    #login-page,
+    #registration-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--text-main);
+    }
+
+    .login-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--primary-color), #818cf8);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .login-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .login-card {
+      background: var(--surface-bg);
+      padding: 2.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-color: var(--primary-color);
+    }
+
+    .login-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      justify-content: flex-start;
+      font-size: 1.5rem;
+      border-bottom: none;
+    }
+
+    .login-card p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .login-card form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .login-card .field {
+      margin-bottom: 0.5rem;
+    }
+
+    .login-card button {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    /* Admin Card Specifics */
+    .login-card.admin {
+      background: #f8fafc;
+    }
+
+    .login-card.admin h3 {
+      color: var(--secondary-color);
+    }
+
+
+    /* File Inputs */
+    input[type="file"] {
+      background: white;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    input[type="file"]::file-selector-button {
+      background: var(--background-bg);
+      border: none;
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background: var(--border-color);
+    }
+
+    /* Admin Dashboard Styles */
+    .admin-header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .admin-header h2 {
+      margin: 0;
+      color: var(--primary-color);
+    }
+
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .filters-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      min-width: 150px;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .admin-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .admin-table tr:hover {
+      background: #f1f5f9;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .status-approved {
+      background: #f0fdf4;
+      color: #15803d;
+    }
+
+    .status-rejected {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    /* Side Panel */
+    .side-panel {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-panel.open {
+      right: 0;
+    }
+
+    .panel-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-bg);
+    }
+
+    .panel-content {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .detail-row {
+      margin-bottom: 1rem;
+    }
+
+    .detail-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+      font-weight: 500;
+    }
+
+    .cert-preview {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      text-align: center;
+      background: #f8fafc;
+    }
+
+    .panel-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 1rem;
+      background: white;
+    }
+
+    .panel-footer button {
+      flex: 1;
+    }
+
+    .panel-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+
+    .panel-overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Login Page -->
+  <div id="login-page">
+    <div class="login-header">
+      <h2>MANAGEMENT COUNSELLING 2026</h2>
+      <p>Government College of Engineering, Erode</p>
+    </div>
+
+    <div class="login-container">
+      <!-- Student Login Card -->
+      <div class="login-card">
+        <h3>Student Login</h3>
+        <p>Login to fill your application</p>
+        <form id="studentLoginForm">
+          <div class="field">
+            <label>Email ID</label>
+            <input type="email" id="loginEmail" placeholder="example@email.com" required>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="********" required>
+          </div>
+          <button type="submit">Login as Student</button>
+          <div style="text-align: center; margin-top: 10px;">
+            <a href="#" id="createAccountLink"
+              style="font-size: 0.9rem; color: var(--primary-color); text-decoration: none;">Create Account</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Admin Login Card -->
+      <div class="login-card admin">
+        <h3>Admin Login</h3>
+        <p>Restricted access for officials</p>
+        <form id="adminLoginForm">
+          <div class="field">
+            <label>Admin ID</label>
+            <input type="text" id="adminIdInput" placeholder="Admin ID" required>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="adminPasswordInput" placeholder="********" required>
+          </div>
+          <button type="submit" class="secondary">Login as Admin</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registration Page (Hidden by default) -->
+  <div id="registration-page" class="hidden">
+    <div class="login-header">
+      <h2>Create Account</h2>
+      <p>Register for TNEA 2025</p>
+    </div>
+
+    <div class="login-container">
+      <div class="login-card">
+        <h3>Sign Up</h3>
+        <p>Enter your details to register</p>
+        <form id="registrationForm">
+          <div class="field">
+            <label>Email ID *</label>
+            <input type="email" id="regEmail" placeholder="example@email.com" required>
+          </div>
+          <div class="field">
+            <label>Password *</label>
+            <input type="password" id="regPassword" placeholder="********" required>
+          </div>
+          <div class="field">
+            <label>Confirm Password *</label>
+            <input type="password" id="regConfirmPassword" placeholder="********" required>
+          </div>
+          <button type="submit">Register & Continue</button>
+          <button type="button" class="secondary" id="backToLoginBtn">Back to Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Choice Filling Page -->
+  <div id="choice-filling-page" class="hidden">
+    <div class="login-header">
+      <h2>Choice Filling</h2>
+      <p>Select your preferred colleges and courses</p>
+    </div>
+    <div class="container" style="max-width: 1000px;">
+      <div class="choice-container">
+        <!-- Available Choices -->
+        <div class="panel">
+          <h3>Available Colleges</h3>
+          <input type="text" id="searchCollege" placeholder="Search by Name or Code..." onkeyup="filterColleges()"
+            style="width: 100%; box-sizing: border-box; margin-bottom: 10px;">
+          <div id="availableList" class="list-group">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Selected Choices -->
+        <div class="panel">
+          <h3>My Choices</h3>
+          <div id="selectedList" class="list-group">
+            <!-- Populated by JS -->
+          </div>
+          <button class="btn" onclick="saveChoices()" style="width: 100%; margin-top: 1rem;">Save Choices</button>
+          <button class="secondary" onclick="logoutChoiceFilling()"
+            style="width: 100%; margin-top: 0.5rem;">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Page (For Login) -->
+  <div id="dashboard-page" class="hidden">
+    <header>
+      <h2>TNEA 2025 Dashboard</h2>
+      <p>Welcome back, Student</p>
+    </header>
+    <div class="container" style="text-align: center; padding: 3rem;">
+      <div class="status-card"
+        style="background:#fff; padding:2rem; border-radius:12px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);">
+        <h3>Application Status</h3>
+        <p style="font-size:1.2rem; margin:1rem 0; color:var(--primary-color); font-weight:600;">Application Submitted
+        </p>
+        <p>Your application (No. 200017) is currently under review.</p>
+        <button class="secondary" style="margin-top:1rem;" onclick="location.reload()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rejected Page -->
+  <div id="rejected-page" class="hidden">
+    <header>
+      <h2>TNEA 2026 Dashboard</h2>
+      <p>Welcome back, Student</p>
+    </header>
+    <div class="container" style="text-align: center; padding: 3rem;">
+      <div class="status-card"
+        style="background:#fff; padding:2rem; border-radius:12px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); border-left: 5px solid #ef4444;">
+        <h3 style="color: #ef4444;">Application Rejected</h3>
+        <p style="font-size:1.2rem; margin:1rem 0; color:var(--text-main); font-weight:600;">Status: Declined</p>
+        <p>Your application has been rejected by the administration.</p>
+        <p>Please contact the helpdesk for more information.</p>
+        <button class="secondary" style="margin-top:1rem;" onclick="location.reload()">Logout</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Allotment Page -->
+  <div id="allotment-page" class="hidden">
+    <header>
+      <h2>TNEA 2026 Dashboard</h2>
+      <p>Welcome back, Student</p>
+    </header>
+    <div class="container" style="text-align: center; padding: 3rem;">
+      <div class="status-card"
+        style="background:#fff; padding:2rem; border-radius:12px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); border-left: 5px solid #10b981;">
+        <h3 style="color: #10b981;">Provisional Allotment Order</h3>
+        <p style="font-size:1.2rem; margin:1rem 0; color:var(--text-main); font-weight:600;">Status: Allotted</p>
+
+        <div style="text-align: left; background: #f0fdf4; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+          <p><strong>Rank:</strong> <span id="allottedRank"></span></p>
+          <p><strong>Community:</strong> <span id="allottedCommunity"></span></p>
+          <hr style="margin: 10px 0; border: 0; border-top: 1px solid #d1fae5;">
+          <p><strong>College:</strong> <span id="allottedCollege"></span></p>
+          <p><strong>Branch:</strong> <span id="allottedBranch"></span></p>
+          <p><strong>Quota:</strong> <span id="allottedQuota"></span></p>
+        </div>
+
+        <div id="download-order-section" class="hidden">
+          <p>Please download your allotment order and report to the college.</p>
+          <button onclick="window.print()" style="margin-right: 1rem;">Download Order (PDF)</button>
+        </div>
+
+        <div id="confirmation-options" style="margin-top: 2rem; border-top: 1px solid #ccc; padding-top: 1rem;">
+          <h3>Choose Your Confirmation Option</h3>
+          <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">You must select ONE option to proceed.</p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 0 auto;">
+            <button onclick="submitConfirmation('Admission_Confirmed')"
+              style="background-color: #2563eb; color: white; padding: 1rem;">
+              🔵 <strong>Option 1: Accept & Confirm</strong><br>
+              <span style="font-size: 0.8rem; opacity: 0.9;">I am happy with this seat. Seat is confirmed.</span>
+            </button>
+
+            <button onclick="submitConfirmation('Upward_Movement')"
+              style="background-color: #ca8a04; color: white; padding: 1rem;">
+              🟡 <strong>Option 2: Accept & Upward Movement</strong><br>
+              <span style="font-size: 0.8rem; opacity: 0.9;">Accept this seat, but look for better branch in next
+                round.</span>
+            </button>
+
+            <button onclick="submitConfirmation('Declined')"
+              style="background-color: #dc2626; color: white; padding: 1rem;">
+              🔴 <strong>Option 3: Decline</strong><br>
+              <span style="font-size: 0.8rem; opacity: 0.9;">I reject this seat. (Risky, seat cancelled)</span>
+            </button>
+          </div>
+          <p style="color: #dc2626; font-size: 0.8rem; margin-top: 10px;">⚠️ If you don’t choose any option, the seat is
+            automatically cancelled.</p>
+        </div>
+
+        <button class="secondary" style="margin-top:2rem;" onclick="location.reload()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Content (Hidden by default) -->
+  <div id="app-content" class="hidden">
+    <header>
+      <h2>Government College of Engineering, Erode</h2>
+      <p>Management Admissions - 2026</p>
+    </header>
+
+    <div class="container">
+      <h3>Application Number: <span>200017</span></h3>
+
+      <div class="steps-container">
+        <div class="steps">
+          <div class="step active" data-step="1">1</div>
+          <div class="step" data-step="2">2</div>
+          <div class="step" data-step="3">3</div>
+          <div class="step" data-step="4">4</div>
+          <div class="step" data-step="5">5</div>
+        </div>
+        <div class="step-labels">
+          <span>Personal</span>
+          <span>Schooling</span>
+          <span>Academic</span>
+          <span>Uploads</span>
+          <span>Payment</span>
+        </div>
+      </div>
+
+      <form id="applicationForm">
+        <!-- Step 1: Personal Information -->
+        <div id="step1" class="form-step">
+          <h4>1. Personal Information</h4>
+
+          <div class="row">
+            <div class="field" style="max-width: 300px;">
+              <label>Token No *</label>
+              <input type="text" id="tokenNo" placeholder="eg. C4000" required>
+            </div>
+            <div class="field">
+              <label>Parent Corporation (Division) *</label>
+              <select id="parentCorp" required onchange="toggleRegion()">
+                <option value="">Select</option>
+                <option value="MTC">MTC (Chennai)</option>
+                <option value="SETC">SETC (State Express)</option>
+                <option value="TNSTC-Coimbatore">TNSTC-Coimbatore</option>
+                <option value="TNSTC-Salem">TNSTC-Salem</option>
+                <option value="TNSTC-Villupuram">TNSTC-Villupuram</option>
+                <option value="TNSTC-Kumbakonam">TNSTC-Kumbakonam</option>
+                <option value="TNSTC-Madurai">TNSTC-Madurai</option>
+                <option value="TNSTC-Tirunelveli">TNSTC-Tirunelveli</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Parent Region (Sub-division) *</label>
+              <select id="parentRegion" required>
+                <option value="">Select Corporation First</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Name *</label>
+              <input type="text" id="name" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Guardian/Parent Name *</label>
+              <input type="text" id="guardianName" required>
+            </div>
+            <div class="field">
+              <label>Parent/Guardian Mobile *</label>
+              <input type="tel" id="parentMobile" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>date of Birth *</label>
+              <input type="date" id="dob" required>
+            </div>
+            <div class="field">
+              <label>Gender *</label>
+              <select id="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Transgender">Transgender</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Civic Status *</label>
+              <select id="civic" required>
+                <option value="">Select</option>
+                <option>Corporation</option>
+                <option>Municipality</option>
+                <option>Town Panchayat</option>
+                <option>Village Panchayat</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Nativity *</label>
+              <select id="nativity" required>
+                <option>Tamil Nadu</option>
+                <option>Other State</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Nationality *</label>
+              <select id="nationality" required>
+                <option>Indian</option>
+                <option>Sri Lankan Tamil Refugee</option>
+                <option>Others</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Mother Tongue *</label>
+              <select id="motherTongue" required>
+                <option>Tamil</option>
+                <option>English</option>
+                <option>Telugu</option>
+                <option>Malayalam</option>
+                <option>Kannada</option>
+                <option>Hindi</option>
+                <option>Urdu</option>
+                <option>Others</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Caste *</label>
+              <select id="caste" required>
+                <option value="">Select</option>
+                <option value="OC">Open Competition (OC)</option>
+                <option value="BC">Backward Classes (BC)</option>
+                <option value="BCM">Backward Class Muslims (BCM)</option>
+                <option value="MBC">Most Backward Classes (MBC)</option>
+                <option value="DNC">Denotified Communities (DNC)</option>
+                <option value="SC">Scheduled Castes (SC)</option>
+                <option value="SCA">Scheduled Castes Arunthathiyars (SCA)</option>
+                <option value="ST">Scheduled Tribes (ST)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Sub-Caste *</label>
+              <input type="text" id="subCaste" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button type="button" onclick="nextStep(2)">Save & Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 2: School of Study (Renumbered from 4) -->
+        <div id="step2" class="form-step hidden">
+          <h4>2. School of Study Information</h4>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Please enter details of schools
+            studied from 6th to 12th Standard.</p>
+
+          <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="autofillSchools" style="width: auto;">
+            <label for="autofillSchools" style="margin:0;">Same as 6th Standard (Autofill)</label>
+          </div>
+
+          <div class="table-responsive">
+            <table class="school-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Year of Passing</th>
+                  <th>School Name</th>
+                  <th>District</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>6th</td>
+                  <td><input type="number" class="year-input" value="2019" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7th</td>
+                  <td><input type="number" class="year-input" value="2020" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8th</td>
+                  <td><input type="number" class="year-input" value="2021" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9th</td>
+                  <td><input type="number" class="year-input" value="2022" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10th</td>
+                  <td><input type="number" class="year-input" value="2023" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11th</td>
+                  <td><input type="number" class="year-input" value="2024" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>12th</td>
+                  <td><input type="number" class="year-input" value="2025" required></td>
+                  <td><input type="text" class="school-input" required></td>
+                  <td>
+                    <select class="district-select" onchange="toggleDistrictInput(this)" required>
+                      <option value="">Select</option>
+                      <option value="Ariyalur">Ariyalur</option>
+                      <option value="Chengalpattu">Chengalpattu</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Coimbatore">Coimbatore</option>
+                      <option value="Cuddalore">Cuddalore</option>
+                      <option value="Dharmapuri">Dharmapuri</option>
+                      <option value="Dindigul">Dindigul</option>
+                      <option value="Erode">Erode</option>
+                      <option value="Kallakurichi">Kallakurichi</option>
+                      <option value="Kancheepuram">Kancheepuram</option>
+                      <option value="Kanyakumari">Kanyakumari</option>
+                      <option value="Karur">Karur</option>
+                      <option value="Krishnagiri">Krishnagiri</option>
+                      <option value="Madurai">Madurai</option>
+                      <option value="Mayiladuthurai">Mayiladuthurai</option>
+                      <option value="Nagapattinam">Nagapattinam</option>
+                      <option value="Namakkal">Namakkal</option>
+                      <option value="Nilgiris">Nilgiris</option>
+                      <option value="Perambalur">Perambalur</option>
+                      <option value="Pudukkottai">Pudukkottai</option>
+                      <option value="Ramanathapuram">Ramanathapuram</option>
+                      <option value="Ranipet">Ranipet</option>
+                      <option value="Salem">Salem</option>
+                      <option value="Sivaganga">Sivaganga</option>
+                      <option value="Tenkasi">Tenkasi</option>
+                      <option value="Thanjavur">Thanjavur</option>
+                      <option value="Theni">Theni</option>
+                      <option value="Thoothukudi">Thoothukudi</option>
+                      <option value="Tiruchirappalli">Tiruchirappalli</option>
+                      <option value="Tirunelveli">Tirunelveli</option>
+                      <option value="Tirupathur">Tirupathur</option>
+                      <option value="Tiruppur">Tiruppur</option>
+                      <option value="Tiruvallur">Tiruvallur</option>
+                      <option value="Tiruvannamalai">Tiruvannamalai</option>
+                      <option value="Tiruvarur">Tiruvarur</option>
+                      <option value="Vellore">Vellore</option>
+                      <option value="Viluppuram">Viluppuram</option>
+                      <option value="Virudhunagar">Virudhunagar</option>
+                      <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="district-manual hidden" placeholder="Enter District"
+                      style="display:none; margin-top:5px;">
+                  </td>
+                  <td>
+                    <select class="state-select" onchange="toggleState(this)" required>
+                      <option value="">Select</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu" selected>Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+          <div class="btn-group">
+            <button type="button" class="secondary" onclick="prevStep(1)">Back</button>
+            <button type="button" onclick="nextStep(3)">Save & Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Academic Information (Renumbered from 5) -->
+        <div id="step3" class="form-step hidden">
+          <h4>3. Academic Information</h4>
+
+          <div class="row">
+            <div class="field">
+              <label>Qualifying Examination *</label>
+              <select id="qualifyingExam" required>
+                <option>HSC</option>
+                <option>CBSE</option>
+                <option>ISC</option>
+                <option>Others</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>HSC Registration Number *</label>
+              <input type="text" id="hscRegNo" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>HSC Group *</label>
+              <select id="hscGroup" required>
+                <option value="">Select Group</option>
+                <option>2502 - Physics, Chemistry, Comp Sci, Maths</option>
+                <option>2503 - Physics, Chemistry, Biology, Maths</option>
+                <option>Pure Science</option>
+                <option>Vocational</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Qualified Year *</label>
+              <input type="number" value="2025" required>
+            </div>
+          </div>
+
+          <h5>Marks Obtained</h5>
+          <div class="row">
+            <div class="field" style="max-width: 150px;">
+              <label>Physics</label>
+              <input type="number" id="markPhysics" class="mark-input" max="100" placeholder="/100" required>
+            </div>
+            <div class="field" style="max-width: 150px;">
+              <label>Chemistry</label>
+              <input type="number" id="markChemistry" class="mark-input" max="100" placeholder="/100" required>
+            </div>
+            <div class="field" style="max-width: 150px;">
+              <label>Mathematics</label>
+              <input type="number" id="markMaths" class="mark-input" max="100" placeholder="/100" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button type="button" class="secondary" onclick="prevStep(2)">Back</button>
+            <button type="button" onclick="nextStep(4)">Save & Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Payment (Renumbered from 6) -->
+        <!-- Step 4: Document Upload (Swapped, was Step 5) -->
+        <div id="step4" class="form-step hidden">
+          <h4>4. Document Uploads</h4>
+          <p class="info-text">Supported formats: JPG, JPEG, PNG, PDF (Max 2MB)</p>
+
+          <div class="row">
+            <div class="field">
+              <label>Passport Size Photo *</label>
+              <input type="file" id="photoFile" required>
+            </div>
+            <div class="field">
+              <label>Signature of Student *</label>
+              <input type="file" id="signFile" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>10th Marksheet *</label>
+              <input type="file" id="marksheet10" required>
+            </div>
+            <div class="field">
+              <label>12th Marksheet *</label>
+              <input type="file" id="marksheet12" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Community Certificate *</label>
+              <input type="file" id="communityCert" required>
+            </div>
+            <div class="field">
+              <label>Transfer Certificate *</label>
+              <input type="file" id="tcFile" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field full">
+              <label>Aadhar Card *</label>
+              <input type="file" id="aadharCard" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button type="button" class="secondary" onclick="prevStep(3)">Back</button>
+            <button type="button" onclick="nextStep(5)">Save & Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Document Upload (Renumbered from 7) -->
+        <!-- Step 5: Application Fee Payment (Swapped, was Step 4) -->
+        <div id="step5" class="form-step hidden">
+          <h4>5. Application Fee Payment</h4>
+
+          <div class="payment-card">
+            <div class="payment-summary">
+              <p class="fee-label">Application Fee</p>
+              <h2 class="fee-amount">₹500.00</h2>
+              <p class="fee-desc">For General / BC / MBC Categories</p>
+            </div>
+
+            <div class="payment-methods">
+              <h5>Select Payment Mode</h5>
+              <div class="method-option selected">
+                <input type="radio" name="paymethod" checked>
+                <span>Credit / Debit Card</span>
+              </div>
+              <div class="method-option">
+                <input type="radio" name="paymethod">
+                <span>Net Banking</span>
+              </div>
+              <div class="method-option">
+                <input type="radio" name="paymethod">
+                <span>UPI / QR Code</span>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="secondary" onclick="prevStep(4)">Back</button>
+              <button type="button" onclick="submitApplicationForm()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard Section -->
+  <div id="admin-dashboard" class="hidden">
+    <div class="admin-header">
+      <h2>Admin Portal</h2>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="window.downloadRankList()" class="primary-btn"
+          style="width: auto; padding: 0.5rem 1rem; background-color: #059669;">Generate Rank List (PDF)</button>
+        <button onclick="window.runSeatAllotment()" class="primary-btn"
+          style="width: auto; padding: 0.5rem 1rem; background-color: #2563eb;">Run Seat Allotment</button>
+        <button onclick="logoutAdmin()" class="secondary" style="width: auto; padding: 0.5rem 1rem;">Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-container">
+      <!-- Filters -->
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Status</label>
+          <select id="filterStatus" onchange="renderAdminTable()">
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Corporation</label>
+          <select id="filterCorp" onchange="renderAdminTable()">
+            <option value="All">All</option>
+            <option value="MTC">MTC</option>
+            <option value="SETC">SETC</option>
+            <option value="TNSTC-Coimbatore">TNSTC-Coimbatore</option>
+            <option value="TNSTC-Salem">TNSTC-Salem</option>
+            <option value="TNSTC-Villupuram">TNSTC-Villupuram</option>
+            <option value="TNSTC-Kumbakonam">TNSTC-Kumbakonam</option>
+            <option value="TNSTC-Madurai">TNSTC-Madurai</option>
+            <option value="TNSTC-Tirunelveli">TNSTC-Tirunelveli</option>
+          </select>
+        </div>
+        <div class="filter-group" style="flex-grow: 1;">
+          <label>Search Student</label>
+          <input type="text" id="searchStudent" placeholder="Search by Name or ID..." onkeyup="renderAdminTable()">
+        </div>
+      </div>
+
+      <!-- Student Table -->
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Details</th>
+              <th>Date</th>
+              <th>Rank</th>
+              <th>Status</th>
+              <th>Allotted</th>
+              <th>Quota</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Rows generated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div id="sidePanel" class="side-panel">
+      <div class="panel-header">
+        <h3 id="panelStudentName">Student Details</h3>
+        <button onclick="closeSidePanel()"
+          style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+      </div>
+      <div class="panel-content" id="panelContent">
+        <!-- Content populated by JS -->
+      </div>
+      <div class="panel-footer">
+        <button onclick="updateStatus('Approved')" class="primary-btn"
+          style="background: var(--success-color);">Approve</button>
+        <button onclick="updateStatus('Rejected')" class="secondary"
+          style="color: var(--error-color); border-color: var(--error-color);">Reject</button>
+      </div>
+    </div>
+    <div id="panelOverlay" class="panel-overlay" onclick="closeSidePanel()"></div>
+  </div>
+
+  <div id="dashboard-page" class="hidden" style="text-align: center; padding: 50px;">
+    <h2>Welcome to TNEA Student Dashboard</h2>
+    <p>Your application is under process.</p>
+    <button onclick="location.reload()">Logout</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
