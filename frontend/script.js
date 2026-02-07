@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://tnea-backend-k5xh.onrender.com/api';
 let currentUserId = localStorage.getItem('tnea_user_id');
 let currentStep = 1;
 
